@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>光熱費管理 最終安定版</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+body {
+    font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+    background:#f5f5f5;
+    padding:16px;
+    margin:0;
+}
+
+.container {
+    max-width:950px;
+    margin:auto;
+}
+
+.card {
+    background:white;
+    border-radius:16px;
+    padding:18px;
+    margin-bottom:16px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.08);
+}
+
+select,input,button {
+    width:100%;
+    padding:14px;
+    margin-top:10px;
+    font-size:16px;
+    border-radius:10px;
+    border:1px solid #ccc;
+    box-sizing:border-box;
+    background:white;
+}
+
+button {
+    border:none;
+}
+
+.save {
+    background:#111;
+    color:white;
+}
+
+.reset {
+    background:#d9534f;
+    color:white;
+}
+
+table {
+    width:100%;
+    border-collapse:collapse;
+}
+
+th,td {
+    border-bottom:1px solid #ddd;
+    padding:8px;
+    text-align:center;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="card">
+
+<h1>💡 光熱費管理 最終安定版</h1>
+
+<select id="category">
+<option value="electric">⚡ 電気</option>
+<option value="gas">🔥 ガス</option>
+<option value="water">🚰 水道</option>
+</select>
+
+<select id="year">
+<option value="2016" >2016年</option>
+<option value="2017" >2017年</option>
+<option value="2018" >2018年</option>
+<option value="2019" >2019年</option>
+<option value="2020" >2020年</option>
+<option value="2021" >2021年</option>
+<option value="2022" >2022年</option>
+<option value="2023" >2023年</option>
+<option value="2024" >2024年</option>
+<option value="2025" >2025年</option>
+<option value="2026" selected>2026年</option>
+<option value="2027" >2027年</option>
+<option value="2028" >2028年</option>
+<option value="2029" >2029年</option>
+<option value="2030" >2030年</option>
+<option value="2031" >2031年</option>
+<option value="2032" >2032年</option>
+<option value="2033" >2033年</option>
+<option value="2034" >2034年</option>
+<option value="2035" >2035年</option>
+<option value="2036" >2036年</option>
+</select>
+
+<select id="month">
+<option value="1" >1月</option>
+<option value="2" >2月</option>
+<option value="3" >3月</option>
+<option value="4" >4月</option>
+<option value="5" selected>5月</option>
+<option value="6" >6月</option>
+<option value="7" >7月</option>
+<option value="8" >8月</option>
+<option value="9" >9月</option>
+<option value="10" >10月</option>
+<option value="11" >11月</option>
+<option value="12" >12月</option>
+</select>
+
+<input type="number" id="usage" placeholder="使用量">
+<input type="number" id="cost" placeholder="料金">
+
+<button class="save" onclick="saveData()">保存</button>
+
+</div>
+
+<div class="card">
+
+<h2>📈 年比較グラフ</h2>
+
+<select id="compare1">
+<option value="2016" >2016年</option>
+<option value="2017" >2017年</option>
+<option value="2018" >2018年</option>
+<option value="2019" >2019年</option>
+<option value="2020" >2020年</option>
+<option value="2021" >2021年</option>
+<option value="2022" >2022年</option>
+<option value="2023" >2023年</option>
+<option value="2024" >2024年</option>
+<option value="2025" >2025年</option>
+<option value="2026" selected>2026年</option>
+<option value="2027" >2027年</option>
+<option value="2028" >2028年</option>
+<option value="2029" >2029年</option>
+<option value="2030" >2030年</option>
+<option value="2031" >2031年</option>
+<option value="2032" >2032年</option>
+<option value="2033" >2033年</option>
+<option value="2034" >2034年</option>
+<option value="2035" >2035年</option>
+<option value="2036" >2036年</option>
+</select>
+
+<select id="compare2">
+<option value="2016" >2016年</option>
+<option value="2017" >2017年</option>
+<option value="2018" >2018年</option>
+<option value="2019" >2019年</option>
+<option value="2020" >2020年</option>
+<option value="2021" >2021年</option>
+<option value="2022" >2022年</option>
+<option value="2023" >2023年</option>
+<option value="2024" >2024年</option>
+<option value="2025" >2025年</option>
+<option value="2026" selected>2026年</option>
+<option value="2027" >2027年</option>
+<option value="2028" >2028年</option>
+<option value="2029" >2029年</option>
+<option value="2030" >2030年</option>
+<option value="2031" >2031年</option>
+<option value="2032" >2032年</option>
+<option value="2033" >2033年</option>
+<option value="2034" >2034年</option>
+<option value="2035" >2035年</option>
+<option value="2036" >2036年</option>
+</select>
+
+<select id="compare3">
+<option value="2016" >2016年</option>
+<option value="2017" >2017年</option>
+<option value="2018" >2018年</option>
+<option value="2019" >2019年</option>
+<option value="2020" >2020年</option>
+<option value="2021" >2021年</option>
+<option value="2022" >2022年</option>
+<option value="2023" >2023年</option>
+<option value="2024" >2024年</option>
+<option value="2025" >2025年</option>
+<option value="2026" selected>2026年</option>
+<option value="2027" >2027年</option>
+<option value="2028" >2028年</option>
+<option value="2029" >2029年</option>
+<option value="2030" >2030年</option>
+<option value="2031" >2031年</option>
+<option value="2032" >2032年</option>
+<option value="2033" >2033年</option>
+<option value="2034" >2034年</option>
+<option value="2035" >2035年</option>
+<option value="2036" >2036年</option>
+</select>
+
+<canvas id="chart"></canvas>
+
+</div>
+
+<div class="card">
+
+<h2>📋 履歴</h2>
+
+<table>
+<thead>
+<tr>
+<th>種類</th>
+<th>年月</th>
+<th>使用量</th>
+<th>料金</th>
+</tr>
+</thead>
+
+<tbody id="history"></tbody>
+
+</table>
+
+<button class="reset" onclick="resetData()">全削除</button>
+
+</div>
+
+</div>
+
+<script>
+
+const now = new Date();
+
+const japanDate = new Intl.DateTimeFormat('ja-JP', {
+    timeZone:'Asia/Tokyo',
+    year:'numeric',
+    month:'numeric'
+}).formatToParts(now);
+
+let currentYear = "2026";
+let currentMonth = "5";
+
+japanDate.forEach(p=>{
+    if(p.type === "year") currentYear = p.value;
+    if(p.type === "month") currentMonth = p.value;
+});
+
+document.getElementById("year").value = currentYear;
+document.getElementById("month").value = currentMonth;
+
+document.getElementById("compare1").value = String(Number(currentYear)-1);
+document.getElementById("compare2").value = String(Number(currentYear)-2);
+document.getElementById("compare3").value = String(Number(currentYear)-3);
+
+const categoryNames = {
+    electric:"⚡ 電気",
+    gas:"🔥 ガス",
+    water:"🚰 水道"
+};
+
+function getData(){
+    return JSON.parse(localStorage.getItem("utility_final_stable") || "[]");
+}
+
+function saveData(){
+
+    const category = document.getElementById("category").value;
+    const year = document.getElementById("year").value;
+    const month = document.getElementById("month").value;
+    const usage = document.getElementById("usage").value;
+    const cost = document.getElementById("cost").value;
+
+    if(cost === "") {
+        alert("料金を入力してください");
+        return;
+    }
+
+    const data = getData();
+
+    data.push({
+        category,
+        year,
+        month,
+        usage:Number(usage || 0),
+        cost:Number(cost)
+    });
+
+    localStorage.setItem("utility_final_stable", JSON.stringify(data));
+
+    document.getElementById("usage").value = "";
+    document.getElementById("cost").value = "";
+
+    updateUI();
+}
+
+let chart;
+
+function updateUI(){
+
+    const data = getData();
+
+    const history = document.getElementById("history");
+
+    history.innerHTML = "";
+
+    data.forEach(item=>{
+
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+        <td>${categoryNames[item.category]}</td>
+        <td>${item.year}/${item.month}</td>
+        <td>${item.usage}</td>
+        <td>${item.cost.toLocaleString()}円</td>
+        `;
+
+        history.appendChild(row);
+
+    });
+
+    drawChart(data);
+}
+
+function totals(data, year){
+
+    const arr = [];
+
+    for(let i=1;i<=12;i++){
+
+        let total = 0;
+
+        data.forEach(item=>{
+
+            if(item.year == year && Number(item.month) === i){
+                total += item.cost;
+            }
+
+        });
+
+        arr.push(total);
+    }
+
+    return arr;
+}
+
+function drawChart(data){
+
+    const labels = ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"];
+
+    const compare1 = document.getElementById("compare1").value;
+    const compare2 = document.getElementById("compare2").value;
+    const compare3 = document.getElementById("compare3").value;
+
+    if(chart) {
+        chart.destroy();
+    }
+
+    chart = new Chart(document.getElementById("chart"), {
+        type:"line",
+        data:{
+            labels:labels,
+            datasets:[
+                {
+                    label: currentYear + "年",
+                    data: totals(data, currentYear)
+                },
+                {
+                    label: compare1 + "年",
+                    data: totals(data, compare1)
+                },
+                {
+                    label: compare2 + "年",
+                    data: totals(data, compare2)
+                },
+                {
+                    label: compare3 + "年",
+                    data: totals(data, compare3)
+                }
+            ]
+        }
+    });
+}
+
+document.getElementById("compare1").addEventListener("change", updateUI);
+document.getElementById("compare2").addEventListener("change", updateUI);
+document.getElementById("compare3").addEventListener("change", updateUI);
+
+function resetData(){
+
+    if(confirm("全削除しますか？")){
+
+        localStorage.removeItem("utility_final_stable");
+
+        updateUI();
+    }
+}
+
+updateUI();
+
+</script>
+
+</body>
+</html>
